@@ -3,15 +3,23 @@
 //
 
 #include "MusicPlayer.h"
+#ifdef MUSICPLAYER_LOADABLE
 #include "ui_musicplayer.h"
+#endif
 
 // todo lst_albums populate; select and only load selected albums
 // todo qpushbutton animation
 // todo icons instead of words > no i18n needed
 
-MusicPlayer::MusicPlayer(Logger *log, QWidget *parent): QWidget(parent), ui(new Ui::MusicPlayer), log(log)
+MusicPlayer::MusicPlayer(Logger *log, QWidget *parent): QWidget(parent),
+#ifdef MUSICPLAYER_LOADABLE
+ui(new Ui::MusicPlayer),
+#endif
+log(log)
 {
+#ifdef MUSICPLAYER_LOADABLE
     ui->setupUi(this);
+#endif
     playerLayout = new QGridLayout(this);
     libraryLayout = new QGridLayout(this);
     player = new Player(log, this);
@@ -32,6 +40,7 @@ MusicPlayer::~MusicPlayer()
     delete ui;
 }
 
+#ifdef MUSICPLAYER_LOADABLE
 extern "C" MUSICPLAYER_EXPORT QWidget* create(Logger *log) {
     return new MusicPlayer(log);
 }
@@ -52,3 +61,4 @@ extern "C" MUSICPLAYER_EXPORT QStringList getSettingsKeys(){
 extern "C" MUSICPLAYER_EXPORT QStringList getDependencies(){
     return QStringList() << "Logger";
 }
+#endif
