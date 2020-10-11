@@ -48,3 +48,7 @@ extern "C" MUSICPLAYER_EXPORT QStringList getSettingsKeys(){
     return QStringList() << KEY_SETTINGS_VOLUME << KEY_SETTINGS_DEFAULT_ALBUM << KEY_SETTINGS_DIRECTORY
                          << KEY_SETTINGS_MUTE << KEY_SETTINGS_PLAY_ALBUM_ON_START << KEY_SETTINGS_SHUFFLE;
 }
+
+extern "C" MUSICPLAYER_EXPORT QStringList getDependencies(){
+    return QStringList() << "Logger";
+}
