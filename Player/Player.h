@@ -13,6 +13,8 @@
 #include <QtMultimedia/QMediaPlayer>
 #include <QtMultimedia/QMediaMetaData>
 
+#include "../Logger/Logger.h"
+
 #define KEY_SETTINGS_DIRECTORY "directory"
 #define KEY_SETTINGS_VOLUME "volume"
 #define KEY_SETTINGS_SHUFFLE "shuffle"
@@ -31,6 +33,7 @@ private:
     Ui::Player *ui;
 
     QSettings *settings;
+    Logger *log;
 
     bool playing = false;
 
@@ -39,7 +42,7 @@ private:
     void createDefaultSettings();
     void loadSettings();
 
-    QString getName();
+    static QString getName();
 
     template<typename T> void setValue(const QString& key, T value);
 
@@ -60,7 +63,7 @@ private slots:
     void handleMediaPlayerStateChanged();
 
 public:
-    explicit Player(QSettings *settings, QWidget *parent = nullptr);
+    explicit Player(Logger *log, QWidget *parent = nullptr);
     ~Player() override;
 
     QMediaPlayer* getMediaPlayer();

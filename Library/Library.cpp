@@ -6,9 +6,8 @@
 #include "ui_library.h"
 
 
-Library::Library(Player *player, QWidget *parent): QWidget(parent), ui(new Ui::Library) {
+Library::Library(Logger *log, Player *player, QWidget *parent): QWidget(parent), ui(new Ui::Library), log(log), player(player) {
     ui->setupUi(this);
-    this->player = player;
     selectedAlbums = new QList<AlbumItem*>();
     populateAlbums();
     connect(ui->lst_albums, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(onAlbumSelected(QListWidgetItem*)));
@@ -22,12 +21,12 @@ Library::~Library() {
 void Library::populateSongs() {
     ui->lst_songs->clear();
     QDir musicDir(player->getMusicDirectory());
-    Logger::info(getName(), "populating song list");
+    log->info(getName(), "populating song list");
     for(auto *item : selectedAlbums->toVector()){
         QDir albumDir(musicDir.absoluteFilePath(item->getPath()));
-        Logger::debug(getName(), "from album: " + albumDir.absolutePath());
+        log->debug(getName(), "from album: " + albumDir.absolutePath());
         for(const QString& s : albumDir.entryList(QStringList() << "*.mp3")) { // todo maybe more file types
-            Logger::debug(getName(), "found song: " + s);
+            log->debug(getName(), "found song: " + s);
             ui->lst_songs->addItem(new SongItem(albumDir.absoluteFilePath(s)));
         }
     }
@@ -36,9 +35,9 @@ void Library::populateSongs() {
 void Library::populateAlbums() {
     ui->lst_albums->clear();
     QDir musicLib(player->getMusicDirectory());
-    Logger::info(getName(), "populating album list from: " + musicLib.absolutePath());
+    log->info(getName(), "populating album list from: " + musicLib.absolutePath());
     for(const QString& a : musicLib.entryList(QDir::Dirs)) {
-        Logger::debug(getName(), "found: " + a);
+        log->debug(getName(), "found: " + a);
         // todo ignore . .. etc
         ui->lst_albums->addItem(new AlbumItem(musicLib.absoluteFilePath(a)));
     }
@@ -50,7 +49,7 @@ QString Library::getName() {
 
 void Library::onSongSelected(QListWidgetItem *item) {
     auto *si = dynamic_cast<SongItem*>(item);
-    Logger::debug(getName(), "going to play: " + si->getPath());
+    log->debug(getName(), "going to play: " + si->getPath());
     auto *mp = player->getMediaPlayer();
     auto *p = new QMediaPlaylist();
     emit mp->stop();

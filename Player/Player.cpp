@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "ui_player.h"
 
-Player::Player(QSettings *settings, QWidget *parent): QWidget(parent), ui(new Ui::Player), settings(settings){
+Player::Player(Logger *log, QWidget *parent): QWidget(parent), ui(new Ui::Player), log(log), settings(new QSettings("carpi", "musicplayer")){
     ui->setupUi(this);
 
     player = new QMediaPlayer(this);
@@ -45,7 +45,7 @@ Player::~Player() {
 
 void Player::createDefaultSettings() {
     if(settings->contains(getName())) return;
-    Logger::info(getName(), "setting default settings");
+    log->info(getName(), "setting default settings");
     settings->beginGroup(getName());
     settings->setValue(KEY_SETTINGS_DIRECTORY, QDir::home().absoluteFilePath("Music")); // todo do not hard code
     settings->setValue(KEY_SETTINGS_VOLUME, 30);
@@ -58,7 +58,7 @@ void Player::createDefaultSettings() {
 }
 
 void Player::loadSettings() {
-    Logger::info(getName(), "loading settings");
+    log->info(getName(), "loading settings");
     settings->beginGroup(getName());
 
     bool muted = settings->value(KEY_SETTINGS_MUTE).toBool();
@@ -144,7 +144,7 @@ QString Player::getMusicDirectory() {
 }
 
 void Player::handleMediaPlayerError() {
-    Logger::error(getName(), player->errorString());
+    log->error(getName(), player->errorString());
 }
 
 void Player::handleMediaPlayerMediaStatusChanged() {
@@ -170,7 +170,7 @@ void Player::handleMediaPlayerMediaStatusChanged() {
         case QMediaPlayer::InvalidMedia:
             r = "InvalidMedia"; break;
     }
-    Logger::debug(getName(), r);
+    log->debug(getName(), r);
 }
 
 void Player::handleMediaPlayerStateChanged() {

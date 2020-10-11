@@ -9,14 +9,13 @@
 // todo qpushbutton animation
 // todo icons instead of words > no i18n needed
 
-MusicPlayer::MusicPlayer(QSettings *settings, QWidget *parent): QWidget(parent), ui(new Ui::MusicPlayer), settings(settings)
+MusicPlayer::MusicPlayer(Logger *log, QWidget *parent): QWidget(parent), ui(new Ui::MusicPlayer), log(log)
 {
     ui->setupUi(this);
-
     playerLayout = new QGridLayout(this);
     libraryLayout = new QGridLayout(this);
-    player = new Player(settings, this);
-    library = new Library(player);
+    player = new Player(log, this);
+    library = new Library(log, player);
     ui->tabWidget->setStyleSheet("QTabBar::tab { height: 50px; width: 150px;}");
     playerLayout->addWidget(player);
     libraryLayout->addWidget(library);
@@ -33,8 +32,8 @@ MusicPlayer::~MusicPlayer()
     delete ui;
 }
 
-extern "C" MUSICPLAYER_EXPORT QWidget* create(QSettings *settings) {
-    return new MusicPlayer(settings);
+extern "C" MUSICPLAYER_EXPORT QWidget* create(Logger *log) {
+    return new MusicPlayer(log);
 }
 
 extern "C" MUSICPLAYER_EXPORT char* getName() {

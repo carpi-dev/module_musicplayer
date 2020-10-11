@@ -9,6 +9,7 @@
 
 #include "Player/Player.h"
 #include "Library/Library.h"
+#include "Logger/Logger.h"
 
 #include <QString>
 #include <QWidget>
@@ -30,17 +31,20 @@ private:
     Player *player;
     Library *library;
     QSettings *settings;
+    Logger *log;
 
 public:
-    explicit MusicPlayer(QSettings *settings, QWidget *parent = nullptr);
+    explicit MusicPlayer(Logger *log, QWidget *parent = nullptr);
     ~MusicPlayer() override;
 };
 
 extern "C" {
     MUSICPLAYER_EXPORT int getDefaultIndex();
     MUSICPLAYER_EXPORT char* getName();
-    MUSICPLAYER_EXPORT QWidget* create(QSettings *settings);
+    MUSICPLAYER_EXPORT QWidget* create(Logger *log);
     MUSICPLAYER_EXPORT QStringList getSettingsKeys();
+    MUSICPLAYER_EXPORT QStringList getDependencies();
+    MUSICPLAYER_EXPORT int getVersion();
 };
 
 

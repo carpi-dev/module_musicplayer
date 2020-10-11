@@ -34,6 +34,9 @@ add_library(musicplayer SHARED
 
         Library/ListItemWithPath/ListItemWithPath.cpp
         Library/ListItemWithPath/ListItemWithPath.h
+
+        Logger/Logger.h
+        Logger/Logger.cpp
 )
 
 

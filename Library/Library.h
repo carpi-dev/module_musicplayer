@@ -5,7 +5,9 @@
 #ifndef CARPI_QT_LIBRARY_H
 #define CARPI_QT_LIBRARY_H
 
+#include "../Logger/Logger.h"
 #include "../Player/Player.h"
+
 #include "SongItem/SongItem.h"
 #include "AlbumItem/AlbumItem.h"
 
@@ -22,6 +24,7 @@ Q_OBJECT
 private:
     Ui::Library *ui;
     Player *player;
+    Logger *log;
 
     QList<AlbumItem*> *selectedAlbums;
 
@@ -35,7 +38,7 @@ private slots:
     void onAlbumSelected(QListWidgetItem *item);
 
 public:
-    explicit Library(Player *player, QWidget *parent = nullptr);
+    explicit Library(Logger *log, Player *player, QWidget *parent = nullptr);
     ~Library() override;
 };
 
