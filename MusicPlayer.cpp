@@ -11,11 +11,11 @@
 // todo qpushbutton animation
 // todo icons instead of words > no i18n needed
 
-MusicPlayer::MusicPlayer(Logger *log, QWidget *parent): QWidget(parent),
+MusicPlayer::MusicPlayer(Logger *log, QWidget *parent): QWidget(parent)
 #ifdef MUSICPLAYER_LOADABLE
-ui(new Ui::MusicPlayer),
+,ui(new Ui::MusicPlayer)
 #endif
-log(log)
+,log(log)
 {
 #ifdef MUSICPLAYER_LOADABLE
     ui->setupUi(this);
